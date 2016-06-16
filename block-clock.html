@@ -1,0 +1,166 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <meta charset="utf-8"> 
+    <title>现代感时钟</title>
+    <style>
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        img {
+            height: 172px;
+            width: 122px;
+            vertical-align: top;
+        }
+        #wrap {
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            height: 172px;
+            width: 1040px;
+        }
+        ul {
+            position: relative;
+            float: left;
+            width: 130px;
+        }
+        li {
+            margin: 0 4px;
+            width: 122px;
+        }
+        .sport {
+            height: 175px;
+        }
+        .sport li {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <ul class="list">
+        <li><img src="img1/0.JPG" alt="1"></li>
+        <li><img src="img1/0.JPG" alt=""></li>
+    </ul>
+    <ul class="list">
+        <li><img src="img1/0.JPG" alt="1"></li>
+        <li><img src="img1/0.JPG" alt=""></li>
+    </ul>
+    <ul class="sport">
+        <li style="z-index:2;"><img src="img1/colon.JPG" alt=""></li>
+        <li style="z-index:1;"><img src="img1/kong.JPG" alt=""></li>
+    </ul>
+    <ul class="list">
+        <li><img src="img1/0.JPG" alt="1"></li>
+        <li><img src="img1/0.JPG" alt=""></li>
+    </ul>
+    <ul class="list">
+        <li><img src="img1/0.JPG" alt="1"></li>
+        <li><img src="img1/0.JPG" alt=""></li>
+    </ul>
+    <ul class="sport">
+        <li style="z-index:2;"><img src="img1/colon.JPG" alt=""></li>
+        <li style="z-index:1;"><img src="img1/kong.JPG" alt=""></li>
+    </ul>
+    <ul class="list">
+        <li><img src="img1/0.JPG" alt="1"></li>
+        <li><img src="img1/0.JPG" alt=""></li>
+    </ul>
+    <ul class="list">
+        <li><img src="img1/0.JPG" alt="1"></li>
+        <li><img src="img1/0.JPG" alt=""></li>
+    </ul>
+</div>
+<script src="cTween.js"></script>
+<script src="startMove.js"></script>
+<script>
+    var wrap = $('#wrap');
+    var imgs = $('img');
+    var uls = $('ul');
+    var sports = $('.sport');
+    var liH = css(wrap,'height');
+    var arr = [];
+    var timer = 0;
+    var before = '000000';
+    var arrImg = [
+        'img1/0.JPG',
+        'img1/1.JPG',
+        'img1/2.JPG',
+        'img1/3.JPG',
+        'img1/4.JPG',
+        'img1/5.JPG',
+        'img1/6.JPG',
+        'img1/7.JPG',
+        'img1/8.JPG',
+        'img1/9.JPG'
+    ];
+    for(var i = 0; i < uls.length; i++){
+            if(uls[i].className == 'list'){
+                arr.push(uls[i]);
+            }
+        }
+    fn();
+    timer = setInterval(fn,1000);
+    function fn(){
+        var date = new Date();
+        var hours = add(date.getHours());
+        var minutes = add(date.getMinutes());
+        var seconds = add(date.getSeconds());
+        var str = hours + minutes + seconds;
+        console.log(str)
+        for(var i = 0; i < arr.length; i++){
+            if(before.charAt(i) != str.charAt(i)){
+                var img1 = $('img',arr[i])[0];
+                var img2 = $('img',arr[i])[1];
+                arr[i].style.top = '0';
+                img1.src = arrImg[before.charAt(i)];
+                img2.src = arrImg[str.charAt(i)];
+                var obj = {
+                    "element": arr[i],
+                    "time": 400,
+                    "target": {"top": -liH},
+                    "type": 'linear'
+                };
+                cTween(obj);
+            }
+        }
+        before = str;
+    }
+    setTimeout(function(){
+        sport(sports[0]);
+        sport(sports[1]);  
+    },1000);
+    
+    function sport(parent){
+            var imgs1 = parent.getElementsByTagName('img')[0];
+            var obj2 = {
+                "element": imgs1,
+                "time": 500,
+                "target": {"opacity": 100},
+                "type": "linear",
+                "callBack": function (){
+                    sport(parent)
+                }
+            };
+            var obj = {
+                "element": imgs1,
+                "time": 500,
+                "target": {"opacity": 0},
+                "type": "linear",
+                "callBack": function (){
+                    cTween(obj2)
+                }
+            };
+            cTween(obj);
+        }
+    
+    function add(nub){
+        return nub < 10? '0'+nub: nub+'';
+    }
+</script>
+</body>
+</html>
